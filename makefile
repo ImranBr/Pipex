@@ -1,4 +1,4 @@
-CC = gcc
+CC = cc
 
 CFLAGS = -Werror -Wextra -Wall -MMD -g3 -fPIC
 
@@ -8,7 +8,7 @@ LIBPRINTF = lib/ft_printf/lib/libprintf.a
 
 LIBFT = lib/libft/lib/libft.a
 
-SRC_DIR = src
+SRC_DIR = srcs
 
 OBJ_DIR = objs
 
