@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:36:54 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/04/28 19:56:23 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:53:21 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "pipex.h"
 
-char	**get_path(char **env)
+char	**get_path(t_commande *command)
 {
 	int		i;
 	char	*str;
@@ -24,10 +24,10 @@ char	**get_path(char **env)
 	i = 0;
 	// int j = 0;
 	path = "PATH=";
-	while (env[i])
+	while (command->env[i])
 	{
-		if (ft_strncmp(env[i], path, 5) == 0)
-			str = env[i];
+		if (ft_strncmp(command->env[i], path, 5) == 0)
+			str = command->env[i];
 		i++;
 	}
 	tab = ft_split(str + 5, ':');
@@ -39,28 +39,27 @@ char	**get_path(char **env)
 	return (tab);
 }
 
-char	*get_cmd(char **av, char **env)
+char	*get_cmd(t_commande *command)
 {
 	int		i;
 	int		j;
 	char	**str;
-	char	*pathname;
 
 	i = 1;
-	str = get_path(env);
-	printf("%s\n", av[i]);
+	str = get_path(command);
+	printf("%s\n", command->av[i]);
 	j = 0;
 	while (str[j])
 	{
-		pathname = ft_strjoin2(str[j], av[i]);
-		if (access(pathname, F_OK | X_OK) == 0)
+		command->pathname = ft_strjoin2(str[j], command->av[i]);
+		if (access(command->pathname, F_OK | X_OK) == 0)
 		{
 			printf("commande trouvee\n");
-			return (pathname);
+			return (command->pathname);
 		}
 		j++;
 	}
-	perror(av[i]);
+	perror(command->av[i]);
 	return (NULL);
 }
 
@@ -93,5 +92,6 @@ char	*get_cmd(char **av, char **env)
 // ➜  pipex git:(main) ✗ ./pipe
 
 // construire une fonction qui boucle sur toutes les string du path split
-// tester l'access sur chacunes des string modifier avec le nom de la commande a la fin
+// tester l'access sur chacunes des string modifier avec le nom de la commande 
+// a la fin
 // trouver le path et le stocker
