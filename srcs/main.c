@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/24 21:32:10 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/04/28 17:09:21 by ibarbouc         ###   ########.fr       */
+/*   Created: 2025/04/28 19:58:04 by ibarbouc          #+#    #+#             */
+/*   Updated: 2025/04/28 19:58:22 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "pipex.h"
 
-# include "ft_printf.h"
-# include "libft.h"
-# include <unistd.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-
-char	*ft_strjoin2(char const *s1, char const *s2);
-char	*get_cmd(char **av, char **env);
-char	**get_path(char **env);
-
-#endif
+int	main(int ac, char **av, char **env)
+{
+	(void)ac;
+	create_fork(av, env);
+}
