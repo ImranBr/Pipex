@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 19:58:04 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/04/29 01:54:02 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/04/30 01:03:40 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	command = init(ac, av, env);
-	create_child(&command);
+	// create_child(&command);
+	pipe_dad();
 }
