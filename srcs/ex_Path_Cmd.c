@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:36:54 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/04/29 01:53:21 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:39:06 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ char	**get_path(t_commande *command)
 	char	**tab;
 
 	i = 0;
-	// int j = 0;
 	path = "PATH=";
 	while (command->env[i])
 	{
@@ -31,14 +30,8 @@ char	**get_path(t_commande *command)
 		i++;
 	}
 	tab = ft_split(str + 5, ':');
-	// while (tab[j])
-	// {
-	//     ft_printf("%s\n", tab[j]);
-	//     j++;
-	// }
-	return (tab);
+	return tab;
 }
-
 char	*get_cmd(t_commande *command)
 {
 	int		i;
@@ -54,7 +47,6 @@ char	*get_cmd(t_commande *command)
 		command->pathname = ft_strjoin2(str[j], command->av[i]);
 		if (access(command->pathname, F_OK | X_OK) == 0)
 		{
-			printf("commande trouvee\n");
 			return (command->pathname);
 		}
 		j++;
