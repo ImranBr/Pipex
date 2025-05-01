@@ -6,84 +6,56 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:36:54 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/04/30 20:39:06 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/05/02 01:06:33 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #include "pipex.h"
 
 char	**get_path(t_commande *command)
 {
-	int		i;
-	char	*str;
 	char	*path;
 	char	**tab;
+	int		i;
 
+	tab = NULL;
 	i = 0;
 	path = "PATH=";
 	while (command->env[i])
 	{
 		if (ft_strncmp(command->env[i], path, 5) == 0)
-			str = command->env[i];
+		{
+			tab = ft_split(command->env[i] + 5, ':');
+			break ;
+		}
 		i++;
 	}
-	tab = ft_split(str + 5, ':');
-	return tab;
+	return (tab);
 }
-char	*get_cmd(t_commande *command)
+
+char	*get_cmd(t_commande *command, char *s1)
 {
 	int		i;
-	int		j;
 	char	**str;
+	char	*pathname;
 
-	i = 1;
+	i = 0;
 	str = get_path(command);
-	printf("%s\n", command->av[i]);
-	j = 0;
-	while (str[j])
+	if (!str)
+		return (perror("PATH not found"), NULL);
+	while (str[i])
 	{
-		command->pathname = ft_strjoin2(str[j], command->av[i]);
-		if (access(command->pathname, F_OK | X_OK) == 0)
+		pathname = ft_strjoin2(str[i], s1);
+		if (pathname)
 		{
-			return (command->pathname);
+			if (access(pathname, F_OK | X_OK) == 0)
+			{
+				free_split(str);
+				return (pathname);
+			}
+			free(pathname);
 		}
-		j++;
+		i++;
 	}
-	perror(command->av[i]);
-	return (NULL);
+	return (free_split(str), perror(s1), NULL);
 }
-
-// // int	main(int ac, char **av, char **env)
-// {
-// 	// char	*cmd;
-
-// 	(void)ac;
-// 	// (void)av;
-// 	// get_path(env);
-// 	// cmd = 
-// 	get_cmd(av, env);
-// }
-
-// ./pipex infile cmd1 cmd2 outfile
-
-// ./pipex infile ls cat outfile
-
-// /home/ibarbouc/.local/funcheck/host/cmd1
-// /home/ibarbouc/bin/cmd1
-// /usr/local/sbin/cmd1
-// /usr/local/bin/cmd1
-// /usr/sbin/cmd1
-// /usr/bin/cmd1
-// /sbin/cmd1
-// /bin/cmd1
-// /usr/games/cmd1
-// /usr/local/games/cmd1
-// /snap/bin/cmd1
-// ➜  pipex git:(main) ✗ ./pipe
-
-// construire une fonction qui boucle sur toutes les string du path split
-// tester l'access sur chacunes des string modifier avec le nom de la commande 
-// a la fin
-// trouver le path et le stocker

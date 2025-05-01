@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 21:32:10 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/04/30 20:27:26 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:45:06 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 
 # include "ft_printf.h"
 # include "libft.h"
+# include <fcntl.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <sys/stat.h>
-# include <fcntl.h>
 
 typedef struct s_commande
 {
-	int 	pipefd[2];
+	int		pipefd[2];
 	char	**env;
 	char	**av;
 	char	*pathname;
@@ -34,12 +34,11 @@ typedef struct s_commande
 }			t_commande;
 
 char		*ft_strjoin2(char const *s1, char const *s2);
-char		*get_cmd(t_commande *command);
+char		*get_cmd(t_commande *command, char *s1);
 char		**get_path(t_commande *command);
 void		create_child(t_commande *command);
-void	pipe_dad(void);
-void	first_child(t_commande *command);
-void	second_child(t_commande *command);
-
+void		pipe_dad(void);
+void		first_child(t_commande *command);
+void		second_child(t_commande *command);
 
 #endif
