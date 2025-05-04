@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ex_Path_Cmd.c                                      :+:      :+:    :+:   */
+/*   Path_Cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/28 16:36:54 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/05/02 22:46:34 by ibarbouc         ###   ########.fr       */
+/*   Created: 2025/05/03 13:36:19 by ibarbouc          #+#    #+#             */
+/*   Updated: 2025/05/05 00:24:59 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	**get_path(t_commande *command)
 	char	**tab;
 	int		i;
 
+	if (!command->env)
+		return (NULL);
 	tab = NULL;
 	i = 0;
 	path = "PATH=";
@@ -41,7 +43,7 @@ char	*get_cmd(t_commande *command, char *s1)
 
 	i = 0;
 	if (!s1 || s1[0] == '\0')
-		return (perror("Command not found"), NULL);
+		return (ft_putendl_fd("Command not found", STDERR_FILENO), NULL);
 	if (s1[0] == '/')
 	{
 		if (access(s1, F_OK | X_OK) == 0)
@@ -61,7 +63,3 @@ char	*get_cmd(t_commande *command, char *s1)
 	}
 	return (free_split(str), perror(s1), NULL);
 }
-
-
-// if (ft_strncmp(s1, "/", 1) == 0 && access(s1, F_OK | X_OK) == 0)
-// return (ft_strdup(s1));

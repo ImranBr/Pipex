@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:17:34 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/04/28 16:18:00 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/05/05 00:18:03 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,25 @@ char	*ft_strjoin2(char const *s1, char const *s2)
 	}
 	new_str[i] = '\0';
 	return (new_str);
+}
+
+void	ft_failure(char **cmd, char *file)
+{
+	perror("Execve Failure");
+	if (cmd)
+		free_split(cmd);
+	if (file)
+		free(file);
+	exit(EXIT_FAILURE);
+}
+
+void	ft_check_cmd(char **cmd)
+{
+	if (!cmd || !cmd[0])
+	{
+		ft_putendl_fd("Command not found", STDERR_FILENO);
+		if (cmd)
+			free_split(cmd);
+		exit(EXIT_FAILURE);
+	}
 }

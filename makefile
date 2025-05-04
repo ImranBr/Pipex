@@ -18,7 +18,7 @@ OBJS = $(addprefix $(OBJ_DIR)/,$(addsuffix .o,$(notdir $(basename $(SRCS)))))
 
 DEPENDS = $(OBJS:.o=.d)
 
-NAME = Pipex
+NAME = pipex
 
 -include $(DEPEND)
 
@@ -52,5 +52,4 @@ fclean: clean
 	$(MAKE) -C lib/libft fclean
 
 re: fclean all
-
 .PHONY: all

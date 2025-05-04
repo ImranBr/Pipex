@@ -6,10 +6,11 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 19:58:04 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/05/02 01:32:29 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/05/05 00:52:49 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "pipex.h"
 
 t_commande	init(int ac, char **av, char **env)
@@ -18,11 +19,9 @@ t_commande	init(int ac, char **av, char **env)
 
 	command.env = env;
 	command.av = av;
-	// command.pathname = get_cmd(&command);
 	command.infile = av[1];
 	command.outfile = av[ac - 1];
 	command.len = ac - 3;
-	// command.pids = malloc(sizeof(pid_t) * command.len);
 	return (command);
 }
 
@@ -32,19 +31,16 @@ int	main(int ac, char **av, char **env)
 	pid_t		child1;
 	pid_t		child2;
 
-	(void)ac;
+	if (ac != 5)
+		return (ft_putstr_fd("Error: number of arguments", 2), EXIT_FAILURE);
 	command = init(ac, av, env);
 	pipe(command.pipefd);
 	child1 = fork();
 	if (child1 == 0)
-	{
 		first_child(&command);
-	}
 	child2 = fork();
 	if (child2 == 0)
-	{
-		second_child(&command);
-	}
+		last_child(&command);
 	close(command.pipefd[0]);
 	close(command.pipefd[1]);
 	waitpid(child1, NULL, 0);
