@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:36:19 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/05/05 00:24:59 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:20:53 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	**get_path(t_commande *command)
 	tab = NULL;
 	i = 0;
 	path = "PATH=";
-	while (command->env[i])
+	while (command->env && command->env[i])
 	{
 		if (ft_strncmp(command->env[i], path, 5) == 0)
 		{
