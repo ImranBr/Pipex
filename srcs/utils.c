@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:17:34 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/05/05 16:04:31 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/05/06 01:55:43 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,63 +39,6 @@ char	*ft_strjoin2(char const *s1, char const *s2)
 	return (new_str);
 }
 
-void	close_pipes(int **pipes, int num_pipes)
-{
-	int	i;
-
-	i = 0;
-	while (i < num_pipes)
-	{
-		close(pipes[i][0]);
-		close(pipes[i][1]);
-		i++;
-	}
-}
-
-void	free_pipes(int **pipes, int num_pipes)
-{
-	int	i;
-
-	i = 0;
-	while (i < num_pipes)
-	{
-		free(pipes[i]);
-		i++;
-	}
-	free(pipes);
-}
-
-int	**create_pipes(int num_pipes)
-{
-	int	**pipes;
-	int	i;
-
-	pipes = malloc(sizeof(int *) * num_pipes);
-	if (!pipes)
-		return (NULL);
-	i = 0;
-	while (i < num_pipes)
-	{
-		pipes[i] = malloc(sizeof(int) * 2);
-		if (!pipes[i])
-		{
-			while (i > 0)
-				free(pipes[--i]);
-			free(pipes);
-			return (NULL);
-		}
-		if (pipe(pipes[i]) == -1)
-		{
-			perror("pipe");
-			free_pipes(pipes, i + 1);
-			return (NULL);
-		}
-		i++;
-	}
-	return (pipes);
-}
-
-
 void	ft_failure(char **cmd, char *file)
 {
 	perror("Execve Failure");
@@ -108,11 +51,15 @@ void	ft_failure(char **cmd, char *file)
 
 void	ft_check_cmd(char **cmd)
 {
-	if (!cmd || !cmd[0])
+	if (!cmd)
+	{
+		ft_putendl_fd("Malloc error for command", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	if (!cmd[0])
 	{
 		ft_putendl_fd("Command not found", STDERR_FILENO);
-		if (cmd)
-			free_split(cmd);
+		free_split(cmd);
 		exit(EXIT_FAILURE);
 	}
 }

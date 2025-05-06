@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:36:30 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/05/05 19:24:16 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/05/06 02:21:16 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,14 @@ void	first_cmd(t_commande *command)
 	char	**cmd;
 	pid_t	child;
 
-	pipe(command->pipefd); // return -1 ??? tiakonpri
+	if (pipe(command->pipefd) == -1)
+	{
+		perror("pipe ko");
+		exit(EXIT_FAILURE);
+	}
 	cmd = ft_split(command->av[2], ' ');
-	ft_check_cmd(cmd);
+	printf(" infile name : %s\n", command->infile);
+	
 	fd_infile = open(command->infile, O_RDONLY);
 	if (fd_infile < 0)
 	{
@@ -37,6 +42,7 @@ void	first_cmd(t_commande *command)
 		dup2(command->pipefd[1], STDOUT_FILENO);
 		close(command->pipefd[1]);
 		close(command->pipefd[0]);
+		ft_check_cmd(cmd);
 		file = get_cmd(command, cmd[0]);
 		if (!file)
 		{
@@ -45,10 +51,13 @@ void	first_cmd(t_commande *command)
 			exit(EXIT_FAILURE);
 		}
 		execve(file, cmd, command->env);
+		// close(command->pipefd[0]);
+		// close(command->pipefd[1]);
 		ft_failure(cmd, file);
 	}
 	close(fd_infile);
 	close(command->pipefd[1]);
+	free_split(cmd);
 	command->fd_tmp = command->pipefd[0];
 	command->pipefd[1] = -1;
 	command->pipefd[0] = -1;
@@ -60,9 +69,12 @@ void	middle_cmd(t_commande *command, char *cmd_str)
 	char	**cmd;
 	pid_t	child;
 
-	pipe(command->pipefd); // return -1 ??? tiakonpri
+	if (pipe(command->pipefd) == -1)
+	{
+		perror("pipe ko");
+		exit(EXIT_FAILURE);
+	} // return -1 ??? tiakonpri
 	cmd = ft_split(cmd_str, ' ');
-	ft_check_cmd(cmd);
 	child = fork();
 	if (child == 0)
 	{
@@ -71,6 +83,7 @@ void	middle_cmd(t_commande *command, char *cmd_str)
 		dup2(command->pipefd[1], STDOUT_FILENO);
 		close(command->pipefd[1]);
 		close(command->pipefd[0]);
+		ft_check_cmd(cmd);
 		file = get_cmd(command, cmd[0]);
 		if (!file)
 		{
@@ -81,6 +94,8 @@ void	middle_cmd(t_commande *command, char *cmd_str)
 		ft_failure(cmd, file);
 	}
 	close(command->pipefd[1]);
+	close(command->fd_tmp);
+	free_split(cmd);
 	command->fd_tmp = command->pipefd[0];
 	command->pipefd[1] = -1;
 	command->pipefd[0] = -1;
@@ -92,11 +107,8 @@ void	last_cmd(t_commande *command, int i)
 	char	*file;
 	char	**cmd;
 	pid_t	child;
-
-	ft_putendl_fd("le last", 2);
-	printf("fd_tmp = %d", command->fd_tmp);
+	
 	cmd = ft_split(command->av[i], ' ');
-	ft_check_cmd(cmd);
 	fd_outfile = open(command->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_outfile < 0)
 	{
@@ -111,6 +123,7 @@ void	last_cmd(t_commande *command, int i)
 		close(command->fd_tmp);
 		dup2(fd_outfile, STDOUT_FILENO);
 		close(fd_outfile);
+		ft_check_cmd(cmd);
 		file = get_cmd(command, cmd[0]);
 		if (!file)
 		{
@@ -121,6 +134,7 @@ void	last_cmd(t_commande *command, int i)
 		execve(file, cmd, command->env);
 		ft_failure(cmd, file);
 	}
+	free_split(cmd);
 	close(fd_outfile);
 	close(command->fd_tmp);
 	while (waitpid(-1, NULL, 0) != -1)

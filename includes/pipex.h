@@ -6,7 +6,7 @@
 /*   By: ibarbouc <ibarbouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 21:32:10 by ibarbouc          #+#    #+#             */
-/*   Updated: 2025/05/05 19:11:47 by ibarbouc         ###   ########.fr       */
+/*   Updated: 2025/05/06 01:51:10 by ibarbouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ typedef struct s_commande
 	int		fd_tmp;
 	char	**env;
 	char	**av;
-	char	*pathname;
-	pid_t	*pids;
 	char	*infile;
 	char	*outfile;
-	int		len;
+	// char	*pathname;
+	// pid_t	*pids;
+	// int		len;
 }			t_commande;
 
 char		*ft_strjoin2(char const *s1, char const *s2);
@@ -42,8 +42,5 @@ void		last_cmd(t_commande *command, int i);
 void		middle_cmd(t_commande *command, char *cmd_str);
 void		ft_failure(char **cmd, char *file);
 void		ft_check_cmd(char **cmd);
-void		close_pipes(int **pipes, int num_pipes);
-void		free_pipes(int **pipes, int num_pipes);
-int			**create_pipes(int num_pipes);
 
 #endif
